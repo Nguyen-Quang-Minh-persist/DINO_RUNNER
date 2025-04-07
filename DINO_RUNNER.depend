@@ -1,0 +1,43 @@
+# depslib dependency file v1.0
+1744039771 source:d:\c++\dino_runner\cactus_animation.cpp
+	"cactus_animation.h"
+
+1744039771 d:\c++\dino_runner\cactus_animation.h
+	<SDL.h>
+	<vector>
+
+1744039771 source:d:\c++\dino_runner\dino_animation.cpp
+	"dino_animation.h"
+
+1744039771 d:\c++\dino_runner\dino_animation.h
+	<SDL.h>
+
+1744039771 source:d:\c++\dino_runner\graphich.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	"graphic.h"
+
+1744040102 d:\c++\dino_runner\graphic.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1744039894 source:d:\c++\dino_runner\bird_animation.cpp
+	"bird_animation.h"
+	"dino_animation.h"
+
+1744039771 d:\c++\dino_runner\bird_animation.h
+	<SDL.h>
+
+1744039956 source:d:\c++\dino_runner\graphic.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	"graphic.h"
+
