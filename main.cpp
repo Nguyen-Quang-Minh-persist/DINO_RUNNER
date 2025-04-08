@@ -263,7 +263,7 @@ int main(int argc, char* argv[])
             SDL_RenderCopy(renderer, score_texture, NULL, &score_rect);
             SDL_DestroyTexture(score_texture);
 
-            // 6.9 Game over screen
+            // 6.9 Game over background
             if (gameover)
             {
                 Mix_HaltMusic();
