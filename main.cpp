@@ -12,17 +12,10 @@
 #include "bird_animation.h"
 #include "dino_animation.h"
 #include "cactus_animation.h"
+#include "check_touch.h"
+#include "wait_for_start.h"
 
 using namespace std;
-
-// Check touch of two rectangles
-bool check_touch_two_rect(SDL_Rect& a, SDL_Rect& b)
-{
-    return (a.x < b.x + b.w &&
-            b.x < a.x + a.w &&
-            a.y < b.y + b.h &&
-            b.y < a.y + a.h);
-}
 
 int main(int argc, char* argv[])
 {
@@ -213,7 +206,7 @@ int main(int argc, char* argv[])
                 SDL_Rect cactus_rect = { cactuses[i].x, ground_level - cactus_height, cactus_width, cactus_height };
 
                 if (check_touch_two_rect(dino_rect, cactus_rect))
-                    { gameover = true; }
+                   { gameover = true; }
 
                 if (cactuses[i].x + cactus_width < 0)
                 {
@@ -280,7 +273,7 @@ int main(int argc, char* argv[])
                 SDL_Texture* score_texture = load_text_texture(renderer, font, ss.str().c_str(), text_color);
                 SDL_QueryTexture(score_texture, NULL, NULL, &score_rect.w, &score_rect.h);
                 score_rect.x = (screen_width - score_rect.w) / 2;
-                score_rect.y = 90;
+                score_rect.y = 100;
                 SDL_RenderCopy(renderer, score_texture, NULL, &score_rect);
                 SDL_DestroyTexture(score_texture);
             }
@@ -291,7 +284,6 @@ int main(int argc, char* argv[])
     }
 
     // 7. Clean up and quit
-
     SDL_DestroyTexture(dino_texture1);
     SDL_DestroyTexture(dino_texture2);
     SDL_DestroyTexture(dino_texture3);

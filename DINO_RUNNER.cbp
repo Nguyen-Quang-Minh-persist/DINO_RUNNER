@@ -32,7 +32,18 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="bird_animation.cpp" />
+		<Unit filename="bird_animation.h" />
+		<Unit filename="cactus_animation.cpp" />
+		<Unit filename="cactus_animation.h" />
+		<Unit filename="check_touch.cpp" />
+		<Unit filename="check_touch.h" />
+		<Unit filename="dino_animation.cpp" />
+		<Unit filename="dino_animation.h" />
+		<Unit filename="graphic.cpp" />
+		<Unit filename="graphic.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="parameters.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
