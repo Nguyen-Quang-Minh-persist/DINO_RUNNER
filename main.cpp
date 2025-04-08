@@ -15,7 +15,7 @@
 
 using namespace std;
 
-// Check if two rectangles are touching
+// Check touch of two rectangles
 bool check_touch_two_rect(SDL_Rect& a, SDL_Rect& b)
 {
     return (a.x < b.x + b.w &&
@@ -28,38 +28,41 @@ int main(int argc, char* argv[])
 {
     srand(time(NULL));
 
-    // 1. Initialize SDL, window, and renderer
+    // 1. Declare SDL, window, renderer
     SDL_Window* window = init_SDL(screen_width, screen_height, NAME_OF_GAME);
     SDL_Renderer* renderer = create_renderer(window);
 
-    // 2. Load assets (textures, fonts, sounds)
-        // 2.1 Dino textures
-        SDL_Texture* dino_texture1 = load_texture("dino1.png", renderer);
-        SDL_Texture* dino_texture2 = load_texture("dino2.png", renderer);
-        SDL_Texture* dino_texture3 = load_texture("dino3.png", renderer);
-        SDL_Texture* dino_texture4 = load_texture("dino4.png", renderer);
-        SDL_Texture* dino_texture5 = load_texture("dino5.png", renderer);
-        SDL_Texture* dino_texture6 = load_texture("dino6.png", renderer);
+    // 2. Load textures, fonts, sounds
+        // 2.1.Load textures
+            // 2.1.1 Dino textures
+            SDL_Texture* dino_texture1 = load_texture("dino1.png", renderer);
+            SDL_Texture* dino_texture2 = load_texture("dino2.png", renderer);
+            SDL_Texture* dino_texture3 = load_texture("dino3.png", renderer);
+            SDL_Texture* dino_texture4 = load_texture("dino4.png", renderer);
+            SDL_Texture* dino_texture5 = load_texture("dino5.png", renderer);
+            SDL_Texture* dino_texture6 = load_texture("dino6.png", renderer);
 
-        // 2.2 Bird textures
-        SDL_Texture* bird_texture1 = load_texture("bird1.png", renderer);
-        SDL_Texture* bird_texture2 = load_texture("bird2.png", renderer);
-        SDL_Texture* bird_texture3 = load_texture("bird3.png", renderer);
+            // 2.2.2 Bird textures
+            SDL_Texture* bird_texture1 = load_texture("bird1.png", renderer);
+            SDL_Texture* bird_texture2 = load_texture("bird2.png", renderer);
+            SDL_Texture* bird_texture3 = load_texture("bird3.png", renderer);
 
-        // 2.3 Cactus textures
-        SDL_Texture* cactus_texture = load_texture("cactus.png", renderer);
-        SDL_Texture* background_texture = load_texture("background.png", renderer);
-        SDL_Texture* start_game_texture = load_texture("start_game.png", renderer);
-        SDL_Texture* restart_game_texture = load_texture("restart.png", renderer);
+            // 2.3.2 Cactus textures
+            SDL_Texture* cactus_texture = load_texture("cactus.png", renderer);
 
-        // 2.4 Load music and sounds
+            // 2.3.4 Screen textures
+            SDL_Texture* background_texture = load_texture("background.png", renderer);
+            SDL_Texture* start_game_texture = load_texture("start_game.png", renderer);
+            SDL_Texture* restart_game_texture = load_texture("restart.png", renderer);
+
+        // 2.2 Load music and sounds
         Mix_Music* music = load_music("music.mp3");
         Mix_Chunk* jump_sound = load_sound("jump.mp3");
         Mix_Chunk* gameover_sound = load_sound("gameover.mp3");
 
-        // 2.5 Load font for rendering text
-        TTF_Font* font = TTF_OpenFont("FONT.ttf", font_word);
-        SDL_Color text_color = {139, 69, 19};
+        // 2.3 Load font for rendering text
+        TTF_Font* font = TTF_OpenFont("FONT1.ttf", font_word);
+        SDL_Color text_color = { 101, 67, 33 };
 
     // 3. Show start screen
     SDL_RenderCopy(renderer, start_game_texture, NULL, NULL);
@@ -88,7 +91,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    // 5. Initialize animation of bird, cactus, dinosaus
+    // 5. Update animation of bird, cactus, dinosaus
         // 5.1 Dino animation
         Dino dino;
         dino.y = ground_level - dino_height;
@@ -129,7 +132,7 @@ int main(int argc, char* argv[])
     int next_distance_cactus = min_cactus_distance + rand() % (max_cactus_distance - min_cactus_distance); // // Randomly determine the distance to the next cactus spawn
 
 
-    // 6. Main game loop
+    // 6. Gameloop
     while (!quit)
     {
         // 6.1 Handle input and events
@@ -169,7 +172,7 @@ int main(int argc, char* argv[])
 
         if (!gameover)
         {
-            // 6.2 Update dino physics
+            // 6.2 Update dino animation
             if (dino_data.dino_is_jumping)
             {
                 dino.v += gravity;
@@ -182,7 +185,7 @@ int main(int argc, char* argv[])
                 }
             }
 
-            // 6.3 Spawn new cactus if needed
+            // 6.3 Random new cactus if need
             next_distance_cactus -= cactus_speed * game_speed;
             if (next_distance_cactus <= 0)
             {
@@ -193,7 +196,7 @@ int main(int argc, char* argv[])
                 cactuses.push_back(new_cactus);
             }
 
-            // 6.4 Move and check collisions with cactuses
+            // 6.4 Move cactuses and check touch with dino
             for (int i = 0; i < cactuses.size(); i++)
             {
                 cactuses[i].x -= cactus_speed * game_speed;
@@ -220,8 +223,8 @@ int main(int argc, char* argv[])
             }
 
             // 6.5 Update score and difficulty
-            score++;
-            if (score % 300 == 0) game_speed += 0.5;
+            score ++;
+            if (score % 100 == 0) game_speed += 0.8;
 
             // 6.6 Scroll and render background
             background_pos -= cactus_speed * game_speed;
@@ -235,22 +238,22 @@ int main(int argc, char* argv[])
 
             // 6.7 Update and render all animated objects
 
-            // Cycle through animation frames (reset to 1 after reaching 14 for looping effect)
-            frame_count++;
-            if (frame_count == 15) frame_count = 1;
+                // 6.7.1 Cycle through animation frames (reset to 1 after reaching 14 for looping effect)
+                frame_count++;
+                if (frame_count == 15) frame_count = 1;
 
-            // Update dino animation data and render it
-            dino_data.frame_count = frame_count;
-            dino_data.dino_rect = { dino_x, dino.y, dino_width, dino_height };
-            render_dino_animation(dino_data);
+                // 6.7.2 Update dino animation data and render it
+                dino_data.frame_count = frame_count;
+                dino_data.dino_rect = { dino_x, dino.y, dino_width, dino_height };
+                render_dino_animation(dino_data);
 
-            // Update bird animation frame and render flying birds
-            bird_data.frame_count = frame_count;
-            render_bird_animation(bird_data);
+                // 6.7.3 Update bird animation frame and render flying birds
+                bird_data.frame_count = frame_count;
+                render_bird_animation(bird_data);
 
-            // Update cactus list animation frame and render it
-            cactus_data.cactuses = cactuses;
-            render_cactus_animation(cactus_data);
+                // 6.7.4 Update cactus list animation frame and render it
+                cactus_data.cactuses = cactuses;
+                render_cactus_animation(cactus_data);
 
             // 6.8 Draw score
             stringstream ss;
@@ -288,6 +291,21 @@ int main(int argc, char* argv[])
     }
 
     // 7. Clean up and quit
+
+    SDL_DestroyTexture(dino_texture1);
+    SDL_DestroyTexture(dino_texture2);
+    SDL_DestroyTexture(dino_texture3);
+    SDL_DestroyTexture(dino_texture4);
+    SDL_DestroyTexture(dino_texture5);
+    SDL_DestroyTexture(dino_texture6);
+    SDL_DestroyTexture(bird_texture1);
+    SDL_DestroyTexture(bird_texture2);
+    SDL_DestroyTexture(bird_texture3);
+    SDL_DestroyTexture(cactus_texture);
+    SDL_DestroyTexture(background_texture);
+    SDL_DestroyTexture(start_game_texture);
+    SDL_DestroyTexture(restart_game_texture);
+
     TTF_CloseFont(font);
     quit_SDL(window, renderer);
     return 0;
