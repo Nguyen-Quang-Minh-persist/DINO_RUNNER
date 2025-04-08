@@ -13,7 +13,7 @@
 #include "dino_animation.h"
 #include "cactus_animation.h"
 #include "check_touch.h"
-#include "wait_for_start.h"
+
 
 using namespace std;
 
@@ -251,7 +251,8 @@ int main(int argc, char* argv[])
             // 6.8 Draw score
             stringstream ss;
             ss << "Score: " << score;
-            SDL_Texture* score_texture = load_text_texture(renderer, font, ss.str().c_str(), text_color);
+            string temp = ss.str();
+            SDL_Texture* score_texture = load_text_texture(renderer, font, temp.c_str(), text_color);
             SDL_Rect score_rect;
             SDL_QueryTexture(score_texture, NULL, NULL, &score_rect.w, &score_rect.h);
             score_rect.x = 10;
@@ -270,7 +271,8 @@ int main(int argc, char* argv[])
 
                 stringstream ss;
                 ss << "Score: " << score << "  High score: " << high_score;
-                SDL_Texture* score_texture = load_text_texture(renderer, font, ss.str().c_str(), text_color);
+                string temp = ss.str();
+                SDL_Texture* score_texture = load_text_texture(renderer, font, temp.c_str(), text_color);
                 SDL_QueryTexture(score_texture, NULL, NULL, &score_rect.w, &score_rect.h);
                 score_rect.x = (screen_width - score_rect.w) / 2;
                 score_rect.y = 100;
@@ -283,7 +285,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    // 7. Clean up and quit
+    // 7. Delete and quit
     SDL_DestroyTexture(dino_texture1);
     SDL_DestroyTexture(dino_texture2);
     SDL_DestroyTexture(dino_texture3);

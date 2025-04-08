@@ -33,7 +33,7 @@
 1744039771 d:\c++\dino_runner\bird_animation.h
 	<SDL.h>
 
-1744039956 source:d:\c++\dino_runner\graphic.cpp
+1744104180 source:d:\c++\dino_runner\graphic.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
