@@ -1,0 +1,6 @@
+*** DINO RUNNER GAME
+--> How to play this game
+    "This is a simple game title, based on the idea of the dinosaur game when Google is offline :)"
+--> The gameplay is very simple: The player just needs to press SPACE for the dinosaur to jump when approaching a cactus obstacle. The score will gradually increase over time until the dinosaur steps on a cactus.
+
+*** Thank you! 

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1744039771 source:d:\c++\dino_runner\cactus_animation.cpp
+1744123945 source:d:\c++\dino_runner\cactus_animation.cpp
 	"cactus_animation.h"
 
 1744083539 d:\c++\dino_runner\cactus_animation.h
@@ -41,7 +41,7 @@
 	<SDL_mixer.h>
 	"graphic.h"
 
-1744099942 source:d:\c++\dino_runner\main.cpp
+1744124488 source:d:\c++\dino_runner\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -57,11 +57,10 @@
 	"dino_animation.h"
 	"cactus_animation.h"
 	"check_touch.h"
-	"wait_for_start.h"
 
 1743995203 d:\c++\dino_runner\cactus.h
 
-1744093643 d:\c++\dino_runner\parameters.h
+1744123945 d:\c++\dino_runner\parameters.h
 
 1744099942 d:\c++\dino_runner\check_touch.h
 	<SDL.h>

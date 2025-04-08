@@ -6,6 +6,7 @@
 #include <sstream>
 #include <ctime>
 #include <vector>
+
 #include "cactus.h"
 #include "parameters.h"
 #include "graphic.h"
@@ -35,15 +36,15 @@ int main(int argc, char* argv[])
             SDL_Texture* dino_texture5 = load_texture("dino5.png", renderer);
             SDL_Texture* dino_texture6 = load_texture("dino6.png", renderer);
 
-            // 2.2.2 Bird textures
+            // 2.1.2 Bird textures
             SDL_Texture* bird_texture1 = load_texture("bird1.png", renderer);
             SDL_Texture* bird_texture2 = load_texture("bird2.png", renderer);
             SDL_Texture* bird_texture3 = load_texture("bird3.png", renderer);
 
-            // 2.3.2 Cactus textures
+            // 2.1.3 Cactus textures
             SDL_Texture* cactus_texture = load_texture("cactus.png", renderer);
 
-            // 2.3.4 Screen textures
+            // 2.1.4 Screen textures
             SDL_Texture* background_texture = load_texture("background.png", renderer);
             SDL_Texture* start_game_texture = load_texture("start_game.png", renderer);
             SDL_Texture* restart_game_texture = load_texture("restart.png", renderer);
@@ -54,7 +55,7 @@ int main(int argc, char* argv[])
         Mix_Chunk* gameover_sound = load_sound("gameover.mp3");
 
         // 2.3 Load font for rendering text
-        TTF_Font* font = TTF_OpenFont("FONT1.ttf", font_word);
+        TTF_Font* font = TTF_OpenFont("FONT1.ttf", font_size);
         SDL_Color text_color = { 101, 67, 33 };
 
     // 3. Show start screen
@@ -85,10 +86,11 @@ int main(int argc, char* argv[])
     }
 
     // 5. Update animation of bird, cactus, dinosaus
-        // 5.1 Dino animation
+        // 5.1 Update dino animation
         Dino dino;
         dino.y = ground_level - dino_height;
         dino.v = 0;
+
 
         dino_animation dino_data;
         dino_data.renderer = renderer;
@@ -101,7 +103,7 @@ int main(int argc, char* argv[])
         dino_data.dino_textures[4] = dino_texture5;
         dino_data.dino_textures[5] = dino_texture6;
 
-        // 5.2 Bird animation
+        // 5.2 Update bird animation
         bird_animation bird_data;
         bird_data.renderer = renderer;
         bird_data.screen_width = screen_width;
@@ -114,15 +116,15 @@ int main(int argc, char* argv[])
         bird_data.bird_width = bird_width;
         bird_data.bird_height = bird_height;
 
-        // 5.3 Cactus animation
+        // 5.3 Update cactus animation
         cactus_animation cactus_data;
         cactus_data.renderer = renderer;
         cactus_data.cactus_texture = cactus_texture;
         cactus_data.ground_level = ground_level;
-
-
-    vector<Cactus> cactuses; // A dynamic array to store all cactus obstacles currently on screen
-    int next_distance_cactus = min_cactus_distance + rand() % (max_cactus_distance - min_cactus_distance); // // Randomly determine the distance to the next cactus spawn
+        // Store cactuses
+        vector<Cactus> cactuses;
+        // Random next distance between two cactuses
+        int next_distance_cactus = min_cactus_distance + rand() % (max_cactus_distance - min_cactus_distance);
 
 
     // 6. Gameloop
@@ -131,8 +133,10 @@ int main(int argc, char* argv[])
         // 6.1 Handle input and events
         while (SDL_PollEvent(&event))
         {
+            // 6.1.1 Quit game if click 'x' button
             if (event.type == SDL_QUIT) quit = true;
 
+            // 6.1.2 Handle key press events when the game is running
             if (event.type == SDL_KEYDOWN && !gameover)
             {
                 if (!dino_data.dino_is_jumping)
@@ -143,9 +147,11 @@ int main(int argc, char* argv[])
                 }
             }
 
-            // Restart game after game over
+            // 6.1.3 Restart game after game over
             if (gameover && event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
             {
+                playing_gameover_sound = false;
+
                 Mix_HaltChannel(-1);
                 play(music);
 
@@ -163,9 +169,10 @@ int main(int argc, char* argv[])
             }
         }
 
+        // 6.2 Game handling without collision
         if (!gameover)
         {
-            // 6.2 Update dino animation
+            // 6.2.1 Update dino animation
             if (dino_data.dino_is_jumping)
             {
                 dino.v += gravity;
@@ -178,31 +185,33 @@ int main(int argc, char* argv[])
                 }
             }
 
-            // 6.3 Random new cactus if need
+            // 6.2.2 Random new cactus if need
             next_distance_cactus -= cactus_speed * game_speed;
             if (next_distance_cactus <= 0)
             {
-                next_distance_cactus = min_cactus_distance + rand() % (max_cactus_distance - min_cactus_distance);
+                next_distance_cactus = min_cactus_distance + rand() % (max_cactus_distance - min_cactus_distance + 1);
                 Cactus new_cactus;
                 new_cactus.type = rand() % 2;
                 new_cactus.x = screen_width;
                 cactuses.push_back(new_cactus);
             }
 
-            // 6.4 Move cactuses and check touch with dino
+            // 6.2.3 Move cactuses and check touch with dino
             for (int i = 0; i < cactuses.size(); i++)
             {
                 cactuses[i].x -= cactus_speed * game_speed;
 
+                // Create a box smaller than dino to check touch with the cactus
                 int box_dino_x = dino_x * 1.1;
                 int box_dino_y = dino.y ;
                 int box_dino_width = dino_width * 0.8;
                 int box_dino_height = dino_height * 0.8;
                 SDL_Rect dino_rect = { box_dino_x, box_dino_y, box_dino_width, box_dino_height };
 
+                // Determine the cactus is large or small
                 int cactus_height;
-                if (cactuses[i].type == 0) cactus_height = small_cactus_height; else cactus_height = big_cactus_height;
-
+                if (cactuses[i].type == 0) { cactus_height = small_cactus_height; }
+                else { cactus_height = big_cactus_height; }
                 SDL_Rect cactus_rect = { cactuses[i].x, ground_level - cactus_height, cactus_width, cactus_height };
 
                 if (check_touch_two_rect(dino_rect, cactus_rect))
@@ -215,11 +224,11 @@ int main(int argc, char* argv[])
                 }
             }
 
-            // 6.5 Update score and difficulty
+            // 6.2.4 Update score and difficulty
             score ++;
-            if (score % 100 == 0) game_speed += 0.8;
+            if (score % 100 == 0) game_speed += add_game_speed;
 
-            // 6.6 Scroll and render background
+            // 6.2.5 Scroll and render background
             background_pos -= cactus_speed * game_speed;
             if (background_pos <= -screen_width) background_pos = 0;
 
@@ -229,28 +238,28 @@ int main(int argc, char* argv[])
             SDL_RenderCopy(renderer, background_texture, NULL, &bg_rect1);
             SDL_RenderCopy(renderer, background_texture, NULL, &bg_rect2);
 
-            // 6.7 Update and render all animated objects
+            // 6.2.6 Update and render all animated objects
 
-                // 6.7.1 Cycle through animation frames (reset to 1 after reaching 14 for looping effect)
+                // Cycle through animation frames (reset to 1 after reaching 14 for looping effect)
                 frame_count++;
                 if (frame_count == 15) frame_count = 1;
 
-                // 6.7.2 Update dino animation data and render it
+                // Update dino animation data and render it
                 dino_data.frame_count = frame_count;
                 dino_data.dino_rect = { dino_x, dino.y, dino_width, dino_height };
                 render_dino_animation(dino_data);
 
-                // 6.7.3 Update bird animation frame and render flying birds
+                // Update bird animation frame and render flying birds
                 bird_data.frame_count = frame_count;
                 render_bird_animation(bird_data);
 
-                // 6.7.4 Update cactus list animation frame and render it
+                // Update cactus list animation frame and render it
                 cactus_data.cactuses = cactuses;
                 render_cactus_animation(cactus_data);
 
-            // 6.8 Draw score
+            // 6.2.7 Show score when game is running
             stringstream ss;
-            ss << "Score: " << score;
+            ss << "Score:  " << score;
             string temp = ss.str();
             SDL_Texture* score_texture = load_text_texture(renderer, font, temp.c_str(), text_color);
             SDL_Rect score_rect;
@@ -259,30 +268,35 @@ int main(int argc, char* argv[])
             score_rect.y = 10;
             SDL_RenderCopy(renderer, score_texture, NULL, &score_rect);
             SDL_DestroyTexture(score_texture);
-
-            // 6.9 Game over background
-            if (gameover)
-            {
-                Mix_HaltMusic();
-                play(gameover_sound);
-
-                SDL_Rect restart_rect = { (screen_width - restart_width) / 2, (screen_height - restart_height) / 2, restart_width, restart_height };
-                SDL_RenderCopy(renderer, restart_game_texture, NULL, &restart_rect);
-
-                stringstream ss;
-                ss << "Score: " << score << "  High score: " << high_score;
-                string temp = ss.str();
-                SDL_Texture* score_texture = load_text_texture(renderer, font, temp.c_str(), text_color);
-                SDL_QueryTexture(score_texture, NULL, NULL, &score_rect.w, &score_rect.h);
-                score_rect.x = (screen_width - score_rect.w) / 2;
-                score_rect.y = 100;
-                SDL_RenderCopy(renderer, score_texture, NULL, &score_rect);
-                SDL_DestroyTexture(score_texture);
-            }
-
-            SDL_RenderPresent(renderer);
-            SDL_Delay(16);
         }
+        // 6.3 Handle game when dino touch cactus
+        if (gameover && !playing_gameover_sound)
+        {
+            // 6.3.1 Play gameover sound
+            Mix_HaltMusic();
+            play(gameover_sound);
+            playing_gameover_sound = true;
+
+            // 6.3.2 Show gameover
+            SDL_Rect restart_rect = { (screen_width - restart_width) / 2, (screen_height - restart_height) / 2, restart_width, restart_height };
+            SDL_RenderCopy(renderer, restart_game_texture, NULL, &restart_rect);
+
+            // 6.3.3 Show score and high score
+            stringstream ss;
+            ss << "Score:  " << score << "     High score:  " << high_score;
+            string temp = ss.str();
+            SDL_Texture* score_texture = load_text_texture(renderer, font, temp.c_str(), text_color);
+            SDL_Rect score_rect;
+            SDL_QueryTexture(score_texture, NULL, NULL, &score_rect.w, &score_rect.h);
+            score_rect.x = (screen_width - score_rect.w) / 2;
+            score_rect.y = 100;
+            SDL_RenderCopy(renderer, score_texture, NULL, &score_rect);
+            SDL_DestroyTexture(score_texture);
+        }
+
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16);
+
     }
 
     // 7. Delete and quit

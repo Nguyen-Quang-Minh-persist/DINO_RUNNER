@@ -33,13 +33,17 @@ const int min_cactus_distance = 300;
 const int max_cactus_distance = 600;
 
 // Font of word
-const int font_word = 28;
+const int font_size = 28;
 
 // Characterists of the bird
 const int bird_width = 60;
 const int bird_height = 60;
 
+// Check to play gameover_sound only one time
+bool playing_gameover_sound = false;
 
+// Additional speed for game speed
+const double add_game_speed = 0.8;
 
 #endif
 
