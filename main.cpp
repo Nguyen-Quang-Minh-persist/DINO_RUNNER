@@ -13,7 +13,6 @@
 #include "dino_animation.h"
 #include "cactus_animation.h"
 
-
 using namespace std;
 
 // Check if two rectangles are touching
@@ -84,7 +83,7 @@ int main(int argc, char* argv[])
             if (event.type == SDL_MOUSEBUTTONDOWN)
             {
                 waiting_for_start = false;
-                play(music); // start background music
+                play(music);
             }
         }
     }
